@@ -1,0 +1,158 @@
+<html>
+<head>
+<title>data.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+.s5 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+data.py</font>
+</center></td></tr></table>
+<pre><span class="s0">import </span><span class="s1">json</span>
+<span class="s0">from </span><span class="s1">datetime </span><span class="s0">import </span><span class="s1">datetime</span>
+
+
+<span class="s0">class </span><span class="s1">Andmetöötleja</span><span class="s2">:</span>
+    <span class="s0">def </span><span class="s1">__init__</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">faili_tee</span><span class="s2">):</span>
+        <span class="s0">with </span><span class="s1">open</span><span class="s2">(</span><span class="s1">faili_tee</span><span class="s2">, </span><span class="s3">'r'</span><span class="s2">, </span><span class="s1">encoding</span><span class="s2">=</span><span class="s3">'utf-8'</span><span class="s2">) </span><span class="s0">as </span><span class="s1">file</span><span class="s2">:</span>
+            <span class="s1">self</span><span class="s2">.</span><span class="s1">andmed </span><span class="s2">= </span><span class="s1">json</span><span class="s2">.</span><span class="s1">load</span><span class="s2">(</span><span class="s1">file</span><span class="s2">)</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">tanane_kuupäev </span><span class="s2">= </span><span class="s1">datetime</span><span class="s2">.</span><span class="s1">today</span><span class="s2">()</span>
+        <span class="s1">self</span><span class="s2">.</span><span class="s1">statistika </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">arvuta_statistika</span><span class="s2">()</span>
+
+    <span class="s0">def </span><span class="s1">arvuta_vanus</span><span class="s2">(</span><span class="s1">self</span><span class="s2">, </span><span class="s1">sünniaeg</span><span class="s2">, </span><span class="s1">surmaaeg</span><span class="s2">=</span><span class="s0">None</span><span class="s2">):</span>
+        <span class="s0">if not </span><span class="s1">sünniaeg</span><span class="s2">:</span>
+            <span class="s0">return </span><span class="s4">0</span>
+        <span class="s1">sünniaeg </span><span class="s2">= </span><span class="s1">datetime</span><span class="s2">.</span><span class="s1">strptime</span><span class="s2">(</span><span class="s1">sünniaeg</span><span class="s2">, </span><span class="s3">&quot;%Y-%m-%d&quot;</span><span class="s2">)</span>
+        <span class="s0">if not </span><span class="s1">surmaaeg </span><span class="s0">or </span><span class="s1">surmaaeg </span><span class="s2">== </span><span class="s3">&quot;0000-00-00&quot;</span><span class="s2">:</span>
+            <span class="s0">return </span><span class="s2">(</span><span class="s1">self</span><span class="s2">.</span><span class="s1">tanane_kuupäev </span><span class="s2">- </span><span class="s1">sünniaeg</span><span class="s2">).</span><span class="s1">days </span><span class="s2">// </span><span class="s4">365</span>
+        <span class="s0">else</span><span class="s2">:</span>
+            <span class="s1">surmaaeg </span><span class="s2">= </span><span class="s1">datetime</span><span class="s2">.</span><span class="s1">strptime</span><span class="s2">(</span><span class="s1">surmaaeg</span><span class="s2">, </span><span class="s3">&quot;%Y-%m-%d&quot;</span><span class="s2">)</span>
+            <span class="s0">return </span><span class="s2">(</span><span class="s1">surmaaeg </span><span class="s2">- </span><span class="s1">sünniaeg</span><span class="s2">).</span><span class="s1">days </span><span class="s2">// </span><span class="s4">365</span>
+
+    <span class="s0">def </span><span class="s1">arvuta_statistika</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s1">isikute_arv </span><span class="s2">= </span><span class="s4">0</span>
+        <span class="s1">pikim_nimi </span><span class="s2">= </span><span class="s3">&quot;&quot;</span>
+        <span class="s1">pikim_nimi_pikkus </span><span class="s2">= </span><span class="s4">0</span>
+        <span class="s1">vanim_elus_nimi </span><span class="s2">= </span><span class="s3">&quot;&quot;</span>
+        <span class="s1">vanim_elus_vanus </span><span class="s2">= </span><span class="s4">0</span>
+        <span class="s1">vanim_elus_sünniaeg </span><span class="s2">= </span><span class="s3">&quot;&quot;</span>
+        <span class="s1">vanim_surnud_nimi </span><span class="s2">= </span><span class="s3">&quot;&quot;</span>
+        <span class="s1">vanim_surnud_vanus </span><span class="s2">= </span><span class="s4">0</span>
+        <span class="s1">vanim_surnud_sünniaeg </span><span class="s2">= </span><span class="s3">&quot;&quot;</span>
+        <span class="s1">vanim_surnud_surmaaeg </span><span class="s2">= </span><span class="s3">&quot;&quot;</span>
+        <span class="s1">näitlejate_arv </span><span class="s2">= </span><span class="s4">0</span>
+        <span class="s1">sündinud_1997 </span><span class="s2">= </span><span class="s4">0</span>
+        <span class="s1">elukutsete_hulk </span><span class="s2">= </span><span class="s1">set</span><span class="s2">()</span>
+        <span class="s1">rohkem_kui_kaks_nime </span><span class="s2">= </span><span class="s4">0</span>
+        <span class="s1">sama_sünni_surmaaeg </span><span class="s2">= </span><span class="s4">0</span>
+        <span class="s1">elus_arv </span><span class="s2">= </span><span class="s4">0</span>
+        <span class="s1">surnud_arv </span><span class="s2">= </span><span class="s4">0</span>
+
+        <span class="s0">for </span><span class="s1">isik </span><span class="s0">in </span><span class="s1">self</span><span class="s2">.</span><span class="s1">andmed</span><span class="s2">:</span>
+            <span class="s1">isikute_arv </span><span class="s2">+= </span><span class="s4">1</span>
+
+            <span class="s5"># Pikim nimi</span>
+            <span class="s1">nimi_pikkus </span><span class="s2">= </span><span class="s1">len</span><span class="s2">(</span><span class="s1">isik</span><span class="s2">[</span><span class="s3">&quot;nimi&quot;</span><span class="s2">].</span><span class="s1">replace</span><span class="s2">(</span><span class="s3">&quot; &quot;</span><span class="s2">, </span><span class="s3">&quot;&quot;</span><span class="s2">))</span>
+            <span class="s0">if </span><span class="s1">nimi_pikkus </span><span class="s2">&gt; </span><span class="s1">pikim_nimi_pikkus</span><span class="s2">:</span>
+                <span class="s1">pikim_nimi </span><span class="s2">= </span><span class="s1">isik</span><span class="s2">[</span><span class="s3">&quot;nimi&quot;</span><span class="s2">]</span>
+                <span class="s1">pikim_nimi_pikkus </span><span class="s2">= </span><span class="s1">nimi_pikkus</span>
+
+            <span class="s5"># Vanus</span>
+            <span class="s1">sünniaeg </span><span class="s2">= </span><span class="s1">isik</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s3">&quot;sundinud&quot;</span><span class="s2">)</span>
+            <span class="s1">surmaaeg </span><span class="s2">= </span><span class="s1">isik</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s3">&quot;surnud&quot;</span><span class="s2">, </span><span class="s3">&quot;0000-00-00&quot;</span><span class="s2">)</span>
+            <span class="s1">vanus </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">arvuta_vanus</span><span class="s2">(</span><span class="s1">sünniaeg</span><span class="s2">, </span><span class="s1">surmaaeg</span><span class="s2">)</span>
+
+            <span class="s5"># Vanim elus</span>
+            <span class="s0">if </span><span class="s1">surmaaeg </span><span class="s2">== </span><span class="s3">&quot;0000-00-00&quot;</span><span class="s2">:</span>
+                <span class="s1">elus_arv </span><span class="s2">+= </span><span class="s4">1</span>
+                <span class="s0">if </span><span class="s1">vanus </span><span class="s2">&gt; </span><span class="s1">vanim_elus_vanus</span><span class="s2">:</span>
+                    <span class="s1">vanim_elus_nimi </span><span class="s2">= </span><span class="s1">isik</span><span class="s2">[</span><span class="s3">&quot;nimi&quot;</span><span class="s2">]</span>
+                    <span class="s1">vanim_elus_vanus </span><span class="s2">= </span><span class="s1">vanus</span>
+                    <span class="s1">vanim_elus_sünniaeg </span><span class="s2">= </span><span class="s1">sünniaeg</span>
+            <span class="s0">else</span><span class="s2">:</span>
+                <span class="s1">surnud_arv </span><span class="s2">+= </span><span class="s4">1</span>
+                <span class="s0">if </span><span class="s1">vanus </span><span class="s2">&gt; </span><span class="s1">vanim_surnud_vanus</span><span class="s2">:</span>
+                    <span class="s1">vanim_surnud_nimi </span><span class="s2">= </span><span class="s1">isik</span><span class="s2">[</span><span class="s3">&quot;nimi&quot;</span><span class="s2">]</span>
+                    <span class="s1">vanim_surnud_vanus </span><span class="s2">= </span><span class="s1">vanus</span>
+                    <span class="s1">vanim_surnud_sünniaeg </span><span class="s2">= </span><span class="s1">sünniaeg</span>
+                    <span class="s1">vanim_surnud_surmaaeg </span><span class="s2">= </span><span class="s1">surmaaeg</span>
+
+            <span class="s5"># Näitlejad</span>
+            <span class="s0">if </span><span class="s3">&quot;näitleja&quot; </span><span class="s0">in </span><span class="s1">isik</span><span class="s2">[</span><span class="s3">&quot;amet&quot;</span><span class="s2">].</span><span class="s1">lower</span><span class="s2">():</span>
+                <span class="s1">näitlejate_arv </span><span class="s2">+= </span><span class="s4">1</span>
+
+            <span class="s5"># Sündinud 1997</span>
+            <span class="s0">if </span><span class="s1">sünniaeg </span><span class="s0">and </span><span class="s1">sünniaeg</span><span class="s2">.</span><span class="s1">startswith</span><span class="s2">(</span><span class="s3">&quot;1997&quot;</span><span class="s2">):</span>
+                <span class="s1">sündinud_1997 </span><span class="s2">+= </span><span class="s4">1</span>
+
+            <span class="s5"># Elukutsed</span>
+            <span class="s1">elukutsete_hulk</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s1">isik</span><span class="s2">[</span><span class="s3">&quot;amet&quot;</span><span class="s2">])</span>
+
+            <span class="s5"># Rohkem kui kaks nime</span>
+            <span class="s0">if </span><span class="s1">len</span><span class="s2">(</span><span class="s1">isik</span><span class="s2">[</span><span class="s3">&quot;nimi&quot;</span><span class="s2">].</span><span class="s1">split</span><span class="s2">(</span><span class="s3">' '</span><span class="s2">)) &gt; </span><span class="s4">2</span><span class="s2">:</span>
+                <span class="s1">rohkem_kui_kaks_nime </span><span class="s2">+= </span><span class="s4">1</span>
+
+            <span class="s5"># Sünniaeg ja surmaaeg sama kuu ja päev</span>
+            <span class="s0">if </span><span class="s1">surmaaeg </span><span class="s2">!= </span><span class="s3">&quot;0000-00-00&quot; </span><span class="s0">and </span><span class="s1">sünniaeg </span><span class="s0">and </span><span class="s1">sünniaeg</span><span class="s2">[</span><span class="s4">5</span><span class="s2">:] == </span><span class="s1">surmaaeg</span><span class="s2">[</span><span class="s4">5</span><span class="s2">:]:</span>
+                <span class="s1">sama_sünni_surmaaeg </span><span class="s2">+= </span><span class="s4">1</span>
+
+        <span class="s0">return </span><span class="s2">{</span>
+            <span class="s3">&quot;isikute_arv&quot;</span><span class="s2">: </span><span class="s1">isikute_arv</span><span class="s2">,</span>
+            <span class="s3">&quot;pikim_nimi&quot;</span><span class="s2">: (</span><span class="s1">pikim_nimi</span><span class="s2">, </span><span class="s1">pikim_nimi_pikkus</span><span class="s2">),</span>
+            <span class="s3">&quot;vanim_elus_isik&quot;</span><span class="s2">: (</span><span class="s1">vanim_elus_nimi</span><span class="s2">, </span><span class="s1">vanim_elus_vanus</span><span class="s2">, </span><span class="s1">vanim_elus_sünniaeg</span><span class="s2">),</span>
+            <span class="s3">&quot;vanim_surnud_isik&quot;</span><span class="s2">: (</span><span class="s1">vanim_surnud_nimi</span><span class="s2">, </span><span class="s1">vanim_surnud_vanus</span><span class="s2">, </span><span class="s1">vanim_surnud_sünniaeg</span><span class="s2">, </span><span class="s1">vanim_surnud_surmaaeg</span><span class="s2">),</span>
+            <span class="s3">&quot;näitlejate_arv&quot;</span><span class="s2">: </span><span class="s1">näitlejate_arv</span><span class="s2">,</span>
+            <span class="s3">&quot;sündinud_1997&quot;</span><span class="s2">: </span><span class="s1">sündinud_1997</span><span class="s2">,</span>
+            <span class="s3">&quot;erinevad_elukutsed&quot;</span><span class="s2">: </span><span class="s1">len</span><span class="s2">(</span><span class="s1">elukutsete_hulk</span><span class="s2">),</span>
+            <span class="s3">&quot;rohkem_kui_kaks_nime&quot;</span><span class="s2">: </span><span class="s1">rohkem_kui_kaks_nime</span><span class="s2">,</span>
+            <span class="s3">&quot;sama_sünni_surmaaeg&quot;</span><span class="s2">: </span><span class="s1">sama_sünni_surmaaeg</span><span class="s2">,</span>
+            <span class="s3">&quot;elus_arv&quot;</span><span class="s2">: </span><span class="s1">elus_arv</span><span class="s2">,</span>
+            <span class="s3">&quot;surnud_arv&quot;</span><span class="s2">: </span><span class="s1">surnud_arv</span><span class="s2">,</span>
+        <span class="s2">}</span>
+
+    <span class="s0">def </span><span class="s1">isikute_arv</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s0">return </span><span class="s1">self</span><span class="s2">.</span><span class="s1">statistika</span><span class="s2">[</span><span class="s3">&quot;isikute_arv&quot;</span><span class="s2">]</span>
+
+    <span class="s0">def </span><span class="s1">kõige_pikem_nimi</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s0">return </span><span class="s1">self</span><span class="s2">.</span><span class="s1">statistika</span><span class="s2">[</span><span class="s3">&quot;pikim_nimi&quot;</span><span class="s2">]</span>
+
+    <span class="s0">def </span><span class="s1">vanim_elus_isik</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s1">nimi</span><span class="s2">, </span><span class="s1">vanus</span><span class="s2">, </span><span class="s1">sünniaeg </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">statistika</span><span class="s2">[</span><span class="s3">&quot;vanim_elus_isik&quot;</span><span class="s2">]</span>
+        <span class="s1">sünnikuupäev </span><span class="s2">= </span><span class="s1">datetime</span><span class="s2">.</span><span class="s1">strptime</span><span class="s2">(</span><span class="s1">sünniaeg</span><span class="s2">, </span><span class="s3">&quot;%Y-%m-%d&quot;</span><span class="s2">).</span><span class="s1">strftime</span><span class="s2">(</span><span class="s3">&quot;%d.%m.%Y&quot;</span><span class="s2">)</span>
+        <span class="s0">return </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">nimi</span><span class="s0">}</span><span class="s3">, Vanus: </span><span class="s0">{</span><span class="s1">vanus</span><span class="s0">}</span><span class="s3">, Sündis: </span><span class="s0">{</span><span class="s1">sünnikuupäev</span><span class="s0">}</span><span class="s3">&quot;</span>
+
+    <span class="s0">def </span><span class="s1">vanim_surnud_isik</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s1">nimi</span><span class="s2">, </span><span class="s1">vanus</span><span class="s2">, </span><span class="s1">sünniaeg</span><span class="s2">, </span><span class="s1">surmaaeg </span><span class="s2">= </span><span class="s1">self</span><span class="s2">.</span><span class="s1">statistika</span><span class="s2">[</span><span class="s3">&quot;vanim_surnud_isik&quot;</span><span class="s2">]</span>
+        <span class="s1">sünnikuupäev </span><span class="s2">= </span><span class="s1">datetime</span><span class="s2">.</span><span class="s1">strptime</span><span class="s2">(</span><span class="s1">sünniaeg</span><span class="s2">, </span><span class="s3">&quot;%Y-%m-%d&quot;</span><span class="s2">).</span><span class="s1">strftime</span><span class="s2">(</span><span class="s3">&quot;%d.%m.%Y&quot;</span><span class="s2">)</span>
+        <span class="s1">surmakuupäev </span><span class="s2">= </span><span class="s1">datetime</span><span class="s2">.</span><span class="s1">strptime</span><span class="s2">(</span><span class="s1">surmaaeg</span><span class="s2">, </span><span class="s3">&quot;%Y-%m-%d&quot;</span><span class="s2">).</span><span class="s1">strftime</span><span class="s2">(</span><span class="s3">&quot;%d.%m.%Y&quot;</span><span class="s2">)</span>
+        <span class="s0">return </span><span class="s3">f&quot;</span><span class="s0">{</span><span class="s1">nimi</span><span class="s0">}</span><span class="s3">, Vanus: </span><span class="s0">{</span><span class="s1">vanus</span><span class="s0">}</span><span class="s3">, Sündis: </span><span class="s0">{</span><span class="s1">sünnikuupäev</span><span class="s0">}</span><span class="s3">, Suri: </span><span class="s0">{</span><span class="s1">surmakuupäev</span><span class="s0">}</span><span class="s3">&quot;</span>
+
+    <span class="s0">def </span><span class="s1">näitlejate_arv</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s0">return </span><span class="s1">self</span><span class="s2">.</span><span class="s1">statistika</span><span class="s2">[</span><span class="s3">&quot;näitlejate_arv&quot;</span><span class="s2">]</span>
+
+    <span class="s0">def </span><span class="s1">sündinud_1997</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s0">return </span><span class="s1">self</span><span class="s2">.</span><span class="s1">statistika</span><span class="s2">[</span><span class="s3">&quot;sündinud_1997&quot;</span><span class="s2">]</span>
+
+    <span class="s0">def </span><span class="s1">erinevad_elukutsed</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s0">return </span><span class="s1">self</span><span class="s2">.</span><span class="s1">statistika</span><span class="s2">[</span><span class="s3">&quot;erinevad_elukutsed&quot;</span><span class="s2">]</span>
+
+    <span class="s0">def </span><span class="s1">rohkem_kui_kaks_nime</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s0">return </span><span class="s1">self</span><span class="s2">.</span><span class="s1">statistika</span><span class="s2">[</span><span class="s3">&quot;rohkem_kui_kaks_nime&quot;</span><span class="s2">]</span>
+
+    <span class="s0">def </span><span class="s1">sama_sünni_surmaaeg</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s0">return </span><span class="s1">self</span><span class="s2">.</span><span class="s1">statistika</span><span class="s2">[</span><span class="s3">&quot;sama_sünni_surmaaeg&quot;</span><span class="s2">]</span>
+
+    <span class="s0">def </span><span class="s1">elavate_ja_surnute_arv</span><span class="s2">(</span><span class="s1">self</span><span class="s2">):</span>
+        <span class="s0">return </span><span class="s1">self</span><span class="s2">.</span><span class="s1">statistika</span><span class="s2">[</span><span class="s3">&quot;elus_arv&quot;</span><span class="s2">], </span><span class="s1">self</span><span class="s2">.</span><span class="s1">statistika</span><span class="s2">[</span><span class="s3">&quot;surnud_arv&quot;</span><span class="s2">]</span>
+</pre>
+</body>
+</html>
